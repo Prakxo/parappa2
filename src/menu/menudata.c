@@ -97,10 +97,10 @@ void MenuDataSndReqChan(int chanId, int req, MENU_SPU_ENUM trId)
 
 void MenuDataSpuVolume(int vol)
 {
-    if (vol << 7 <= 0x3FFF)
+    if (vol << 7 <= 0x3fff)
         vol = vol << 7;
     else
-        vol = 0x3FFF;
+        vol = 0x3fff;
 
     TapCt(0x90, vol << 16 | vol, 0);
 }
@@ -134,28 +134,25 @@ void menuDiskSndDebug(void *x)
 {
     int sndId = MDISK_00;
 
-    while (TRUE)
+    while (1)
     {
     loop:
         do
-        {
             MtcWait(1);
-        } while (!(pad[1].one & SCE_PADRdown));
+        while (!(pad[1].one & SCE_PADRdown));
 
         MenuDataDiskSndReq(sndId);
 
         do
-        {
             MtcWait(1);
-        } while (MenuDataDiskSndReady());
+        while (MenuDataDiskSndReady());
 
         MenuDataDiskSndPlay();
         MenuDataDiskVolume(128);
 
         do
-        {
             MtcWait(1);
-        } while (!(pad[1].one & SCE_PADRdown));
+        while (!(pad[1].one & SCE_PADRdown));
 
         MenuDataDiskSndEnd();
         sndId++;
@@ -185,20 +182,14 @@ void MenuVoicePlayVol(int chanId, int vsetIdx, int vol0)
     int           bnkNo;
 
     if (VoiceSet[vsetIdx].bnkNo == 0)
-    {
         bnkNo = 0;
-    }
     else if (_BankChan1Req != VoiceSet[vsetIdx].bnkNo)
-    {
         return;
-    }
     else
     {
         bnkNo = 1;
         if (_BankChan1Stat != 0 && MenuVoiceBankSet(_BankChan1Req) != 0)
-        {
             return;
-        }
     }
 
     sndtap_pp = VoiceSet[vsetIdx].pTap;
@@ -277,10 +268,10 @@ int MenuRoundTim2Trans(TAP_ROUND_ENUM round)
 
 int MenuStageCl1Trans(int nStage, int nRound)
 {
-    if (nStage > 7U)
+    if (nStage > 7u)
         return 1;
 
-    if (nRound > 3U)
+    if (nRound > 3u)
         return 0;
 
     Tim2Trans(GetIntAdrsCurrent(ocl1_rndTbl[nRound][nStage]));
@@ -290,13 +281,13 @@ int MenuStageCl1Trans(int nStage, int nRound)
 
 int MenuCoolCl1Trans(int nStage, int nPos, int nRound)
 {
-    if (nStage > 7U)
+    if (nStage > 7u)
         return 1;
 
-    if (nRound > 3U)
+    if (nRound > 3u)
         return 1;
 
-    if (nPos > 3U)
+    if (nPos > 3u)
         return 1;
 
     Tim2Trans(GetIntAdrsCurrent(ocl1_stageTbl[nStage]->fno[nPos][nRound]));
